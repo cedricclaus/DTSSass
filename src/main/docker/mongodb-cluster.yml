@@ -1,0 +1,16 @@
+version: '2'
+services:
+    dtssass-mongodb:
+        image: mongo:3.4.10
+        ports:
+            - "27017:27017"
+        command: mongos --configdb dtssass-mongodb-config
+    dtssass-mongodb-node:
+        build:
+            context: .
+            dockerfile: mongodb/MongoDB.Dockerfile
+        command: mongod --replSet rs1 --noprealloc --smallfiles
+    dtssass-mongodb-config:
+        image: mongo:3.4.10
+        container_name: dtssass-mongodb-config
+        command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
